@@ -295,8 +295,8 @@ def establish_conn(uid,pwd):
 
 def hivecommunity():
     
-    uid = 'Hive-amr008'#os.environ['hiveuid']
-    pwd = 'JpoTZ7aNd4Q4Rqrx6ypk'#os.environ['hivepwd']
+    uid = os.environ['hiveuid']
+    pwd = os.environ['hivepwd']
 
     conn=establish_conn(uid,pwd)
 
