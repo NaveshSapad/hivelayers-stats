@@ -489,7 +489,7 @@ def load_image(token):
     elif(token=='SPI'):
         image = Image.open('EDS.png') # Same Image for both EDS and SPI
     elif(token=='TAN'):
-        image = Image.open('EDS.png') # Change this
+        image = Image.open('tan.png') # Change this
     elif(token=='UTOPIS'):
         image = Image.open('utopis.png')
     
@@ -539,7 +539,7 @@ def get_balance(hive_user,token):
     list_balances=wallet.get_balances()
     for i in range(0,len(list_balances)):
         if(list_balances[i]['symbol']==token):
-            return(list_balances[i]['balance'])
+            return(float(list_balances[i]['balance'])+float(list_balances[i]['stake']))
     return(0)
 
 def get_chart(df_user_details,token,sym_list,sym):
@@ -571,7 +571,7 @@ def get_chart(df_user_details,token,sym_list,sym):
 
             total_hive=total
                                 
-            st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to Feb 21  : '+ '%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' % total +'.</center>',unsafe_allow_html=True)
+            st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to Feb 22 : '+ '%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' % total +'.</center>',unsafe_allow_html=True)
             
             if sum_sym>0:
                 c = alt.Chart(df_sym).mark_line(point=True).encode(x='date', y='quantity',color='symbol',tooltip=['quantity']).properties(width=1400,height=500) 
@@ -609,7 +609,7 @@ def get_chart(df_user_details,token,sym_list,sym):
                 if sym=='HIVE':
                     total=sum_sym
             
-                st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to Feb 21 : '+'%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' %total+'.</center>',unsafe_allow_html=True)
+                st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to Feb 22 : '+'%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' %total+'.</center>',unsafe_allow_html=True)
             
                 if sum_sym>0:
                     c = alt.Chart(df_sym).mark_line(point=True).encode(x='date', y='quantity',color='symbol',tooltip=['quantity']).properties(width=1400,height=500)                
@@ -653,7 +653,7 @@ def hivetoken():
 
     hive_user=st_hive_username.text_input('Enter your Hive username','amr008')
     hive_user=hive_user.lower()
-    token=st_select_token.selectbox('Select the token you wish to see dividends for',['BRO','INDEX','DHEDGE','EDS','SPI','UTOPIS'])
+    token=st_select_token.selectbox('Select the token you wish to see dividends for',['BRO','INDEX','DHEDGE','EDS','SPI','UTOPIS','TAN'])
     
     if token:
         start=dt.now()
@@ -711,9 +711,9 @@ def hivetoken():
                 APR1=  (((sum_hive) * 52) / (float(balance) * 1 )*100)
 
             if token=='SPI':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to  is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to Feb 22 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token!='EDS' and token!='UTOPIS':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to Feb 21 is: {} HIVE<br> <hr> Per day average(Hive) for the above period from {} token= {} HIVE.<br><hr>Yesterdays payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to Feb 22 is: {} HIVE<br> <hr> Per day average(Hive) for the above period from {} token= {} HIVE.<br><hr>Yesterdays payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token=='EDS':
                 st_total_hive.markdown('<hr><hr><h3>Total Hive from {} to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br><hr> Since most of the users bought EDS at 1 HIVE - APR ( based on EDS price as 1 HIVE ) = {}% </h3>'.format('%.5f' % total_hive,sum_hive,token,"%.2f"%APR,"%.2f"%APR1),unsafe_allow_html=True)
             elif token=='UTOPIS':
