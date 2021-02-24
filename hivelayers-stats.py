@@ -421,9 +421,9 @@ def hivecommunity():
 
     d = st.date_input(
          "Choose the date to display the data",
-         datetime.date(2021, 2, 23),
+         datetime.date(2021, 2, 22),
          min_value=datetime.date(2021, 2, 15),
-         max_value=datetime.date(2021, 2, 23))
+         max_value=datetime.date(2021, 2, 22))
 
     st.write('Selected Date:', str(d))
 
@@ -721,7 +721,7 @@ def hivetoken():
             elif token!='EDS' and token!='UTOPIS':
                 st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to Feb 23 is: {} HIVE<br> <hr> Per day average(Hive) for the above period from {} token= {} HIVE.<br><hr>Yesterdays payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token=='EDS':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br><hr> Since most of the users bought EDS at 1 HIVE - APR ( based on EDS price as 1 HIVE ) = {}% </h3>'.format('%.5f' % total_hive,sum_hive,token,"%.2f"%APR,"%.2f"%APR1),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from EDS to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br><hr> Since most of the users bought EDS at 1 HIVE - APR ( based on EDS price as 1 HIVE ) = {}% </h3>'.format('%.5f' % total_hive,sum_hive,token,"%.2f"%APR,"%.2f"%APR1),unsafe_allow_html=True)
             elif token=='UTOPIS':
                 st_total_hive.markdown('<hr><hr><h3>Total Hive from {} to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br> </h3>'.format(token,'%.5f' % total_hive,'%.3f' % sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             
