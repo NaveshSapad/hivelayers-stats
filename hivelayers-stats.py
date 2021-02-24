@@ -421,9 +421,9 @@ def hivecommunity():
 
     d = st.date_input(
          "Choose the date to display the data",
-         datetime.date(2021, 2, 22),
+         datetime.date(2021, 2, 23),
          min_value=datetime.date(2021, 2, 15),
-         max_value=datetime.date(2021, 2, 22))
+         max_value=datetime.date(2021, 2, 23))
 
     st.write('Selected Date:', str(d))
 
@@ -468,7 +468,7 @@ def load_csv(token):
     
     sym_list=list(set(df['symbol'])) # Take unique symbols
     all_list=[]
-    if token!='EDS' and token!='SPI' and token!='TAN' and token!='UTOPIS':
+    if token!='EDS' and token!='SPI' and  token!='UTOPIS':
         all_list=['All']
     for i in sym_list:
         all_list.append(i) # For Token selection in sidebar
@@ -562,11 +562,13 @@ def get_chart(df_user_details,token,sym_list,sym):
 
             market=Market() # Market instance
             list_metrics=market.get_metrics() # Returns all the tokens in HE with details
-            for i in list_metrics:
-                if(i['symbol']==sym): # Selecting only the symbol we want
-                    total=(float(i['lastPrice'])* sum_sym) # Taking last price and multiplying with total token earned which is = sum_sym
 
-            if sym=='HIVE':
+            if sym!='SWAP.HIVE':
+                for i in list_metrics:
+                    if(i['symbol']==sym): # Selecting only the symbol we want
+                        total=(float(i['lastPrice'])* sum_sym) # Taking last price and multiplying with total token earned which is = sum_sym
+
+            if sym=='HIVE' or sym=='SWAP.HIVE':
                 total=sum_sym
 
             total_hive=total
@@ -600,14 +602,18 @@ def get_chart(df_user_details,token,sym_list,sym):
 
                 market=Market() # Market instance
                 list_metrics=market.get_metrics() # Returns all the tokens in HE with details
-                for i in list_metrics:
-                    if(i['symbol']==sym): # Selecting only the symbol we want
-                        total=(float(i['lastPrice'])* sum_sym) # Taking last price and multiplying with total token earned which is = sum_sym
 
+                if sym!='SWAP.HIVE':
+                    for i in list_metrics:
+                        if(i['symbol']==sym): # Selecting only the symbol we want
+                            total=(float(i['lastPrice'])* sum_sym) # Taking last price and multiplying with total token earned which is = sum_sym
+
+                if sym=='HIVE' or sym=='SWAP.HIVE':
+                    total=sum_sym
+                    
                 total_hive=total_hive+total
                 
-                if sym=='HIVE':
-                    total=sum_sym
+                
             
                 st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to Feb 23 : '+'%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' %total+'.</center>',unsafe_allow_html=True)
             
