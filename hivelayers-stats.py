@@ -714,15 +714,17 @@ def hivetoken():
 
             
             current_token_price= get_token_price(token)
-            
+
 
             if token!='EDS' and token!='SPI' and token!='UTOPIS':
                 APR = (((sum_hive) * 365) / (float(balance) * current_token_price )*100)
             else:
                 APR = (((sum_hive) * 52) / (float(balance) * current_token_price )*100)
                 APR1=  (((sum_hive) * 52) / (float(balance) * 1 )*100)
-
-            if token=='SPI':
+            
+            if token=='TAN':
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to Feb 24 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % (Consider this only if today is not thursday)</h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+            elif token=='SPI':
                 st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to Feb 24 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token!='EDS' and token!='UTOPIS':
                 st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to Feb 24 is: {} HIVE<br> <hr> Per day average(Hive) for the above period from {} token= {} HIVE.<br><hr>Yesterdays payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
