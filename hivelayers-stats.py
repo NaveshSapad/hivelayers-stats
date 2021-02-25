@@ -304,7 +304,7 @@ def hivecommunity():
     .css-z8kais{align-items:center;}
     .css-1bjf9av .css-106gl43 {border:3px black solid;}
 
-    .css-1f5jof3{margin-left:100px;}
+    .css-1f5jof3{margin-left:150px;}
     
     </style>    ''',unsafe_allow_html=True)
 
@@ -421,29 +421,35 @@ def hivecommunity():
 
     d = st.date_input(
          "Choose the date to display the data",
-         datetime.date(2021, 2, 23),
+         datetime.date(2021, 2, 24),
          min_value=datetime.date(2021, 2, 15),
-         max_value=datetime.date(2021, 2, 23))
+         max_value=datetime.date(2021, 2, 24))
 
     st.write('Selected Date:', str(d))
 
-    engage_leo,engage_ctp = st.beta_columns(2)
-    engage_stem,engage_sports = st.beta_columns(2)
+    engage_l=st.empty()
+    engage_leo=st.empty()
+    engage_c=st.empty()
+    engage_ctp=st.empty()
+    engage_st=st.empty()
+    engage_stem=st.empty()
+    engage_sp=st.empty()
+    engage_sports=st.empty()
 
 
     if d:
         file_name='Images_{}'.format(str(d))
 
-        engage_leo.markdown("<h3> LeoFinance Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
+        engage_l.markdown("<h3> LeoFinance Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
         engage_leo.image(file_name+'/leo.png')
         
-        engage_ctp.markdown("<h3>Ctptalk Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
+        engage_c.markdown("<h3>Ctptalk Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
         engage_ctp.image(file_name+'/ctp.png')
         
-        engage_stem.markdown("<hr><h3> STEMGeeks Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
+        engage_st.markdown("<hr><h3> STEMGeeks Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
         engage_stem.image(file_name+'/stem.png')
         
-        engage_sports.markdown("<hr><h3> Sportstalksocial Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
+        engage_sp.markdown("<hr><h3> Sportstalksocial Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
         engage_sports.image(file_name+'/sports.png')
 
     
@@ -745,7 +751,9 @@ if __name__ == '__main__':
     
     st.set_page_config(page_title='Hive Earnings stats',layout='wide')
     st.markdown('''
-    <iframe data-aa="1578725" src="//ad.a-ads.com/1578725?size=728x90" scrolling="no" style="width:728px; height:90px; border:0px; padding:0; overflow:hidden" allowtransparency="true"></iframe>
+   
+   <iframe data-aa="1578725" src="//ad.a-ads.com/1578725?size=728x90" scrolling="no" style="width:728px; height:90px; border:0px; padding:0; overflow:hidden" allowtransparency="true"></iframe>
+   
     ''',unsafe_allow_html=True)
     choose_app = st.sidebar.selectbox("Choose the app",['Token','Community','BreakEven'])
     api=Api()
