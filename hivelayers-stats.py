@@ -438,7 +438,7 @@ def hivecommunity():
 
 
     if d:
-        file_name='Images_{}'.format(str(d))
+        file_name='Images/Images_{}'.format(str(d))
 
         engage_l.markdown("<h3> LeoFinance Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
         engage_leo.image(file_name+'/leo.png')
@@ -457,19 +457,19 @@ def hivecommunity():
 
 def load_csv(token):
     if(token=='BRO'): # Use else when you add more tokens.
-        df=pd.read_csv('bro_payouts.csv')
+        df=pd.read_csv('csv/bro_payouts.csv')
     elif(token=='INDEX'):
-        df=pd.read_csv('index_payouts.csv')
+        df=pd.read_csv('csv/index_payouts.csv')
     elif(token=='DHEDGE'):
-        df=pd.read_csv('dhedge_payouts.csv')
+        df=pd.read_csv('csv/dhedge_payouts.csv')
     elif(token=='EDS'):
-        df=pd.read_csv('EDS_payouts.csv')
+        df=pd.read_csv('csv/EDS_payouts.csv')
     elif(token=='SPI'):
-        df=pd.read_csv('spi_payouts.csv')
+        df=pd.read_csv('csv/spi_payouts.csv')
     elif(token=='TAN'):
-        df=pd.read_csv('tan_payouts.csv')
+        df=pd.read_csv('csv/tan_payouts.csv')
     elif(token=='UTOPIS'):
-        df=pd.read_csv('UTOPIS_payouts.csv')
+        df=pd.read_csv('csv/UTOPIS_payouts.csv')
 
     
     sym_list=list(set(df['symbol'])) # Take unique symbols
@@ -485,19 +485,19 @@ def load_csv(token):
 
 def load_image(token):
     if(token=='BRO'):
-        image = Image.open('bro.png') # Get Bro image
+        image = Image.open('logos/bro.png') # Get Bro image
     elif(token=='INDEX'):
-        image = Image.open('index.png')# Get INDEX image
+        image = Image.open('logos/index.png')# Get INDEX image
     elif(token=='DHEDGE'):
-        image = Image.open('dhedge.png') # Get DHEDGE image
+        image = Image.open('logos/dhedge.png') # Get DHEDGE image
     elif(token=='EDS'):
-        image = Image.open('EDS.png') # Get EDS image
+        image = Image.open('logos/EDS.png') # Get EDS image
     elif(token=='SPI'):
-        image = Image.open('EDS.png') # Same Image for both EDS and SPI
+        image = Image.open('logos/EDS.png') # Same Image for both EDS and SPI
     elif(token=='TAN'):
-        image = Image.open('tan.png') # Change this
+        image = Image.open('logos/tan.png') # Change this
     elif(token=='UTOPIS'):
-        image = Image.open('utopis.png')
+        image = Image.open('logos/utopis.png')
     
     
     return image
