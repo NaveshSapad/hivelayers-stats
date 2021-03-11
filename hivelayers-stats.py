@@ -742,7 +742,75 @@ def hivetoken():
       
 
        
-    
+def hiveauthorrewards():
+    import pandas as pd
+    from datetime import datetime as dt
+    import requests
+    import json
+    import pyodbc
+    from hiveengine.market import Market
+    from hiveengine.api import Api
+    import time
+    from datetime import timedelta
+    import re
+
+    url=st.text_input("Enter URL of your post:")
+    if url!='':
+        new_url=url.split('@')[1]
+        permlink='@'+new_url
+        print(permlink)
+        my_post_progress = st.progress(0)
+
+        res = requests.get('https://scot-api.hive-engine.com/{}?hive=1'.format(permlink))
+        json_r=res.json()
+        
+        def get_token_price(token):
+            market=Market() # Market instance
+            list_metrics=market.get_metrics() # Returns all the tokens in HE with details
+            for i in list_metrics:
+                if(i['symbol']==token): # Selecting only the symbol we want
+                    return(float(i['lastPrice']))
+
+            return(0)
+
+        tokens=json_r.keys()
+        all_balance_list=[]
+        n=str(1)
+
+        hive_total=0
+        len_token=len(tokens)
+        for keys in tokens:
+            my_post_progress.progress(1/len_token)
+            len_token -= 1
+            quantity=json_r[keys]['pending_token']
+            str_precision=json_r[keys]['precision']
+            precision=int((n.ljust(str_precision+1,'0')))
+            quantity=float(quantity)/precision
+
+                
+            hive_price=quantity * get_token_price(keys)
+            hive_price=round(hive_price,3)
+            
+            all_balance_list.append([keys,round(quantity,4),hive_price])
+
+            hive_total += hive_price
+
+            
+        my_post_progress.progress(100)
+        my_post_progress.empty()
+        
+
+        number_votes=len(json_r[keys]['active_votes'])
+
+        st.write("Number of votes on your post = {}".format(number_votes))
+
+
+        df_tokens= pd.DataFrame(all_balance_list,columns=['Token','Amount','Amount in Hive'])
+        
+        st.table(df_tokens)
+
+        st.write("Total Hive when all the tokens are converted to Hive = {}".format(round(hive_total,3)))
+        st.write("<i> Note : This includes both author and curation rewards </i>",unsafe_allow_html=True)
         
 
         
@@ -757,7 +825,7 @@ if __name__ == '__main__':
    <iframe data-aa="1578725" src="//ad.a-ads.com/1578725?size=728x90" scrolling="no" style="width:728px; height:90px; border:0px; padding:0; overflow:hidden" allowtransparency="true"></iframe>
    
     ''',unsafe_allow_html=True)
-    choose_app = st.sidebar.selectbox("Choose the app",['Token','Community','BreakEven'])
+    choose_app = st.sidebar.selectbox("Choose the app",['Token','Community','BreakEven','Post Rewards'])
     api=Api()
     
     
@@ -768,9 +836,11 @@ if __name__ == '__main__':
     elif choose_app == 'Community':
         
         hivecommunity()
-    else:
+    elif choose_app== 'BreakEven':
         
         hivebreakeven()
+    else:
+        hiveauthorrewards()
     
     
     
