@@ -755,6 +755,9 @@ def hiveauthorrewards():
 
     url=st.text_input("Enter URL of your post:")
     if url!='':
+
+        flag_current=0
+        
         new_url=url.split('@')[1]
         permlink='@'+new_url
         print(permlink)
@@ -762,6 +765,10 @@ def hiveauthorrewards():
 
         res = requests.get('https://scot-api.hive-engine.com/{}?hive=1'.format(permlink))
         json_r=res.json()
+
+        if not json_r:
+            flag_current=2
+        
         
         def get_token_price(token):
             market=Market() # Market instance
@@ -779,7 +786,7 @@ def hiveauthorrewards():
         hive_total=0
         len_token=len(tokens)
 
-        flag_current=0
+        
         for keys in tokens:
             my_post_progress.progress(1/len_token)
             len_token -= 1
@@ -806,7 +813,10 @@ def hiveauthorrewards():
         my_post_progress.progress(100)
         my_post_progress.empty()
         
-        if(flag_current==1):
+        if(flag_current==2):
+            st.write("<center><h2> Enter valid URL</center></h2>",unsafe_allow_html=True)
+        
+        elif(flag_current==1):
         
             number_votes=len(json_r[keys]['active_votes'])
 
