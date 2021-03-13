@@ -840,11 +840,6 @@ def hiveauthorrewards():
 if __name__ == '__main__':
     
     st.set_page_config(page_title='Hive Earnings stats',layout='wide')
-    st.markdown('''
-   
-   <iframe data-aa="1578725" src="//ad.a-ads.com/1578725?size=728x90" scrolling="no" style="width:728px; height:90px; border:0px; padding:0; overflow:hidden" allowtransparency="true"></iframe>
-   
-    ''',unsafe_allow_html=True)
     choose_app = st.sidebar.selectbox("Choose the app",['Token','Community','BreakEven','Post Rewards'])
     api=Api()
     
