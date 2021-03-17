@@ -579,7 +579,7 @@ def get_chart(df_user_details,token,sym_list,sym):
 
             total_hive=total
                                 
-            st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to March 16 : '+ '%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' % total +'.</center>',unsafe_allow_html=True)
+            st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to March 15 : '+ '%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' % total +'.</center>',unsafe_allow_html=True)
             
             if sum_sym>0:
                 c = alt.Chart(df_sym).mark_line(point=True).encode(x='date', y='quantity',color='symbol',tooltip=['quantity']).properties(width=1400,height=500) 
@@ -621,7 +621,7 @@ def get_chart(df_user_details,token,sym_list,sym):
                 
                 
             
-                st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to March 16 : '+'%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' %total+'.</center>',unsafe_allow_html=True)
+                st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to March 15 : '+'%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' %total+'.</center>',unsafe_allow_html=True)
             
                 if sum_sym>0:
                     c = alt.Chart(df_sym).mark_line(point=True).encode(x='date', y='quantity',color='symbol',tooltip=['quantity']).properties(width=1400,height=500)                
@@ -723,11 +723,11 @@ def hivetoken():
                 APR1=  (((sum_hive) * 52) / (float(balance) * 1 )*100)
             
             if token=='TAN':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 16 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % (Consider this only if today is not thursday)</h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 15 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % (Consider this only if today is not thursday)</h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token=='SPI':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 16 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 15 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token!='EDS' and token!='UTOPIS':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 16 is: {} HIVE<br> <hr> Per day average(Hive) for the above period from {} token= {} HIVE.<br><hr>Yesterdays payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 15 is: {} HIVE<br> <hr> Per day average(Hive) for the above period from {} token= {} HIVE.<br><hr>Yesterdays payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token=='EDS':
                 st_total_hive.markdown('<hr><hr><h3>Total Hive from EDS to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br><hr> Since most of the users bought EDS at 1 HIVE - APR ( based on EDS price as 1 HIVE ) = {}% </h3>'.format('%.5f' % total_hive,sum_hive,token,"%.2f"%APR,"%.2f"%APR1),unsafe_allow_html=True)
             elif token=='UTOPIS':
@@ -752,86 +752,228 @@ def hiveauthorrewards():
     import time
     from datetime import timedelta
     import re
+    
+    #st.write("1 = Only a particular URL details ")
+    #st.write("2 = All pending posts ( not comments )")
+    #print("3 = All pending posts and comments")
+    
+    #print("Note: Option 3 might take lot of time depending on your engagement - 500 posts+comments takes approximately 25 minutes")
+    
+    choice= st.selectbox("Choose 1 or 2",['1 = Only a particular URL details','2 = All pending posts ( not comments )'])
+    if choice=='1 = Only a particular URL details':
+        select_choice=1
+    else:
+        select_choice=2
+    #select_choice=int(select_choice)
+    start=dt.now()
 
-    url=st.text_input("Enter URL of your post:")
-    if url!='':
+    
+    if select_choice==1:
+        url=st.text_input("Enter URL of your post: ")
+        if st.button("Get my data"):
+            if url!='':
+                flag_current=0
 
-        flag_current=0
+                new_url=url.split('@')[1]
+                permlink='@'+new_url
+                st.write('https://peakd.com/{}'.format(permlink))
+                my_post_progress = st.progress(0)
+
+                res = requests.get('https://scot-api.hive-engine.com/{}?hive=1'.format(permlink))
+                json_r=res.json()
+
+                if not json_r:
+                    flag_current=2
+
+
+                def get_token_price(token):
+                    market=Market() # Market instance
+                    list_metrics=market.get_metrics() # Returns all the tokens in HE with details
+                    for i in list_metrics:
+                        if(i['symbol']==token): # Selecting only the symbol we want
+                            return(float(i['lastPrice']))
+
+                    return(0)
+
+                tokens=json_r.keys()
+                all_balance_list=[]
+                n=str(1)
+
+                hive_total=0
+                len_token=len(tokens)
+
+
+                for keys in tokens:
+                    my_post_progress.progress(1/len_token)
+                    len_token -= 1
+                    quantity=json_r[keys]['pending_token']
+                    str_precision=json_r[keys]['precision']
+                    precision=int((n.ljust(str_precision+1,'0')))
+                    quantity=float(quantity)/precision
+
+                    if(json_r[keys]['cashout_time']>str(dt.utcnow())):
+                        flag_current=1
+                        
+                    
+
+                    hive_price=quantity * get_token_price(keys)
+                    hive_price=round(hive_price,3)
+
+                    all_balance_list.append([keys,round(quantity,4),hive_price])
+
+                    hive_total += hive_price
+
+
+
+                my_post_progress.progress(100)
+                my_post_progress.empty()
+
+                if(flag_current==2):
+                    print("Enter valid URL")
+
+                elif(flag_current==1):
+
+                    number_votes=len(json_r[keys]['active_votes'])
+
+                    st.write("Number of votes on your post = {}".format(number_votes))
+
+
+                    df_tokens= pd.DataFrame(all_balance_list,columns=['Token','Amount','Amount in Hive'])
+
+                    st.table(df_tokens)
+
+                    st.write("Total Hive when all the tokens are converted to Hive = {}".format(round(hive_total,3)))
+                    st.write("Note : This includes both author and curation rewards ")
+                else:
+                    st.write("This post has already been paid out <br><br> Please enter pending posts/comments to get the data ")
+
+
+           
+    elif select_choice==2:
+             
+            uid = os.environ['hiveuid']
+            pwd = os.environ['hivepwd']
         
-        new_url=url.split('@')[1]
-        permlink='@'+new_url
-        print(permlink)
-        my_post_progress = st.progress(0)
-
-        res = requests.get('https://scot-api.hive-engine.com/{}?hive=1'.format(permlink))
-        json_r=res.json()
-
-        if not json_r:
-            flag_current=2
-        
-        
-        def get_token_price(token):
-            market=Market() # Market instance
-            list_metrics=market.get_metrics() # Returns all the tokens in HE with details
-            for i in list_metrics:
-                if(i['symbol']==token): # Selecting only the symbol we want
-                    return(float(i['lastPrice']))
-
-            return(0)
-
-        tokens=json_r.keys()
-        all_balance_list=[]
-        n=str(1)
-
-        hive_total=0
-        len_token=len(tokens)
-
-        
-        for keys in tokens:
-            my_post_progress.progress(1/len_token)
-            len_token -= 1
-            quantity=json_r[keys]['pending_token']
-            str_precision=json_r[keys]['precision']
-            precision=int((n.ljust(str_precision+1,'0')))
-            quantity=float(quantity)/precision
-
-            if(json_r[keys]['cashout_time']>str(dt.utcnow())):
-                flag_current=1
+            conn=establish_conn(uid,pwd)
             
-            
-            hive_price=quantity * get_token_price(keys)
-            hive_price=round(hive_price,3)
-            
-            all_balance_list.append([keys,round(quantity,4),hive_price])
+            user=st.text_input("Enter your username: ")
 
-            hive_total += hive_price
+            if st.button("Get my data"):
+                if user!='':
+                    permlink_column = pd.read_sql_query('''select permlink from Comments where author='{}' and  parent_author='' and created > GETDATE()-7 ORDER BY ID DESC '''.format(user),conn)
+                    
+                    permlink_list=[]
+                    for permlink in permlink_column['permlink'].to_list():
+                        permlink_list.append('@'+user+'/'+permlink)
+                        #print('@'+user+'/'+permlink)
+                    
+                    sum_tokens={}
+                    only_hive={}
+                    my_post_progress = st.progress(0)
+                    perm_left=len(permlink_list)
+                    for permlink in permlink_list:
+                        st.write('https://peakd.com/{}'.format(permlink))
+                        my_post_progress.progress(1/perm_left)
+                        perm_left -= 1
 
-        
-            
-        my_post_progress.progress(100)
-        my_post_progress.empty()
-        
-        if(flag_current==2):
-            st.write("<center><h2> Enter valid URL</center></h2>",unsafe_allow_html=True)
-        
-        elif(flag_current==1):
-        
-            number_votes=len(json_r[keys]['active_votes'])
+                        res = requests.get('https://scot-api.hive-engine.com/{}?hive=1'.format(permlink))
+                        json_r=res.json()
 
-            st.write("Number of votes on your post = {}".format(number_votes))
+                        if not json_r:
+                            flag_current=2
 
 
-            df_tokens= pd.DataFrame(all_balance_list,columns=['Token','Amount','Amount in Hive'])
-            
-            st.table(df_tokens)
+                        def get_token_price(token):
+                            market=Market() # Market instance
+                            list_metrics=market.get_metrics() # Returns all the tokens in HE with details
+                            for i in list_metrics:
+                                if(i['symbol']==token): # Selecting only the symbol we want
+                                    return(float(i['lastPrice']))
 
-            st.write("Total Hive when all the tokens are converted to Hive = {}".format(round(hive_total,3)))
-            st.write("<i> Note : This includes both author and curation rewards </i>",unsafe_allow_html=True)
-        else:
-            st.write("<center><h2> This post has already been paid out <br><br> Please enter pending posts/comments to get the data </h2></center>",unsafe_allow_html=True)
-        
+                            return(0)
 
-        
+                        tokens=json_r.keys()
+                        all_balance_list=[]
+                        n=str(1)
+
+                        hive_total=0
+                        len_token=len(tokens)
+
+
+                        for keys in tokens:
+                            #my_post_progress.progress(1/len_token)
+                            len_token -= 1
+                            quantity=json_r[keys]['pending_token']
+                            str_precision=json_r[keys]['precision']
+                            precision=int((n.ljust(str_precision+1,'0')))
+                            quantity=float(quantity)/precision
+
+                            if(json_r[keys]['cashout_time']>str(dt.utcnow())):
+                                flag_current=1
+
+                            hive_price=quantity * get_token_price(keys)
+                            hive_price=round(hive_price,3)
+
+                            all_balance_list.append([keys,round(quantity,4),hive_price])
+                            
+                            if keys not in sum_tokens:
+                                sum_tokens[keys] = 0
+                                sum_tokens[keys] += quantity
+                            else:
+                                sum_tokens[keys] += quantity
+
+                            hive_total += hive_price
+                        
+                        if 'hive' not in only_hive:
+                            only_hive['hive'] = 0 
+                            only_hive['hive'] += hive_total
+                        else:
+                            only_hive['hive'] += hive_total
+
+                        
+
+                        if(flag_current==2):
+                            st.write("Enter valid URL")
+
+                        elif(flag_current==1):
+
+                            number_votes=len(json_r[keys]['active_votes'])
+
+                            st.write("Number of votes on your post = {}".format(number_votes))
+
+
+                            df_tokens= pd.DataFrame(all_balance_list,columns=['Token','Amount','Amount in Hive'])
+
+                            st.table(df_tokens)
+
+                            st.write("Total Hive when all the tokens are converted to Hive = {}".format(round(hive_total,3)))
+                            st.write("Note : This includes both author and curation rewards ")
+
+                            st.write("<hr>",unsafe_allow_html=True)
+                        else:
+                            st.write("This post has already been paid out <br><br> Please enter pending posts/comments to get the data ")
+
+                        #print("--"*100)
+
+                    
+                    my_post_progress.progress(100)
+                    my_post_progress.empty()
+
+                    st.write("<h1><center>Summary</center></h1>",unsafe_allow_html=True)
+                    
+                    df_sumtokens=pd.DataFrame.from_dict(sum_tokens.items())
+                    df_sumtokens.columns=['Token','Quantity']
+                    df_sumtokens=df_sumtokens.set_index('Token')
+                    
+                    st.table(df_sumtokens)
+
+                    hive_final= round(only_hive['hive'],3)
+                
+                    st.write("If you convert all the tokens to Hive = {} HIVE ".format(hive_final))
+
+                    st.write("<i> Note , this includes both author and curation rewards </i>",unsafe_allow_html=True)
+                    
+                    
 
     
     
