@@ -435,6 +435,10 @@ def hivecommunity():
     engage_stem=st.empty()
     engage_sp=st.empty()
     engage_sports=st.empty()
+    engage_wd=st.empty()
+    engage_weed=st.empty()
+    engage_pb=st.empty()
+    engage_pob=st.empty()
 
 
     if d:
@@ -451,6 +455,15 @@ def hivecommunity():
         
         engage_sp.markdown("<hr><h3> Sportstalksocial Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
         engage_sports.image(file_name+'/sports.png')
+
+
+
+        if(str(d)>'2021-03-21'):
+            engage_wd.markdown("<hr><h3> WEED Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
+            engage_weed.image(file_name+'/weed.png')
+        
+            engage_pb.markdown("<hr><h3> ProofOfBrain Engagement for {} </h3>".format(str(d)),unsafe_allow_html=True)
+            engage_pob.image(file_name+'/pob.png')
 
     
 
