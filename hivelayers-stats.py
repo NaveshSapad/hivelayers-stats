@@ -744,7 +744,8 @@ def hivetoken():
             elif token=='EDS':
                 st_total_hive.markdown('<hr><hr><h3>Total Hive from EDS to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br><hr> Since most of the users bought EDS at 1 HIVE - APR ( based on EDS price as 1 HIVE ) = {}% </h3>'.format('%.5f' % total_hive,sum_hive,token,"%.2f"%APR,"%.2f"%APR1),unsafe_allow_html=True)
             elif token=='UTOPIS':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br> </h3>'.format(token,'%.5f' % total_hive,'%.3f' % sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                #st_total_hive.markdown('<hr><hr><h3>Total Hive from {} to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br> </h3>'.format(token,'%.5f' % total_hive,'%.3f' % sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} to your account is :{} HIVE <br><hr>'.format(token,'%.5f' % total_hive),unsafe_allow_html=True)
             
             
         else:
