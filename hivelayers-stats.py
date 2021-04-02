@@ -421,9 +421,9 @@ def hivecommunity():
 
     d = st.date_input(
          "Choose the date to display the data",
-         datetime.date(2021, 3, 31),
+         datetime.date(2021, 4, 1),
          min_value=datetime.date(2021, 2, 15),
-         max_value=datetime.date(2021, 3, 31))
+         max_value=datetime.date(2021, 4, 1))
 
     st.write('Selected Date:', str(d))
 
@@ -592,7 +592,7 @@ def get_chart(df_user_details,token,sym_list,sym):
 
             total_hive=total
                                 
-            st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to March 31  : '+ '%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' % total +'.</center>',unsafe_allow_html=True)
+            st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to April 1  : '+ '%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' % total +'.</center>',unsafe_allow_html=True)
             
             if sum_sym>0:
                 c = alt.Chart(df_sym).mark_line(point=True).encode(x='date', y='quantity',color='symbol',tooltip=['quantity']).properties(width=1400,height=500) 
@@ -634,7 +634,7 @@ def get_chart(df_user_details,token,sym_list,sym):
                 
                 
             
-                st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to March 31 : '+'%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' %total+'.</center>',unsafe_allow_html=True)
+                st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 to April 1 : '+'%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' %total+'.</center>',unsafe_allow_html=True)
             
                 if sum_sym>0:
                     c = alt.Chart(df_sym).mark_line(point=True).encode(x='date', y='quantity',color='symbol',tooltip=['quantity']).properties(width=1400,height=500)                
@@ -736,11 +736,11 @@ def hivetoken():
                 APR1=  (((sum_hive) * 52) / (float(balance) * 1 )*100)
             
             if token=='TAN':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 31 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % (Consider this only if today is not thursday)</h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to April 1 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % (Consider this only if today is not thursday)</h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token=='SPI':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 31 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to April 1 is: {} HIVE<br> <hr> Per week average(Hive) for the above period from {} token= {} HIVE.<br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token!='EDS' and token!='UTOPIS':
-                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to March 31 is: {} HIVE<br> <hr> Per day average(Hive) for the above period from {} token= {} HIVE.<br><hr>Yesterdays payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
+                st_total_hive.markdown('<hr><hr><h3>Total Hive from {} token from Jan 1 to April 1 is: {} HIVE<br> <hr> Per day average(Hive) for the above period from {} token= {} HIVE.<br><hr>Yesterdays payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{} % </h3>'.format(sym,'%.5f' % total_hive,sym,'%.4f' %per_day_average,"%.5f"%sum_hive,token,"%.2f"%APR),unsafe_allow_html=True)
             elif token=='EDS':
                 st_total_hive.markdown('<hr><hr><h3>Total Hive from EDS to your account is: {} HIVE<br><br><hr>Most recent payout ( in Hive ) ={} Hive <br><hr> APR (based on most recent payout + Recent price of {}):{}% <br><hr> Since most of the users bought EDS at 1 HIVE - APR ( based on EDS price as 1 HIVE ) = {}% </h3>'.format('%.5f' % total_hive,sum_hive,token,"%.2f"%APR,"%.2f"%APR1),unsafe_allow_html=True)
             elif token=='UTOPIS':
@@ -987,14 +987,115 @@ def hiveauthorrewards():
 
                     st.write("<i> Note , this includes both author and curation rewards </i>",unsafe_allow_html=True)
                     
+def brofi():
+    user=st.text_input('Enter your username')
+    user=user.lower()
+
+    if st.button('Retrieve my data'):
+        api=Api()
+        delegation_list=api.find_all('tokens','delegations',query={'to':'brofi','from':user})
+        sum_delegation=[]
+        
+        for i in range(0,len(delegation_list)):
+            sum_delegation.append([delegation_list[i]['symbol'],delegation_list[i]['quantity']])
+        df_test=pd.DataFrame(sum_delegation,columns=['symbol','quantity'])
+        df_test['quantity']=pd.to_numeric(df_test['quantity'])
+        df_test=df_test.groupby('symbol').sum().round(3)
+
+        st.write("Your current delegation to @brofi is-")
+        st.table(df_test)
+        
+        
+        start=dt.now()
+        end=0
+        x=0
+        s=[]
+        st.write("Please wait while I retrieve your dividends details - ")
+        prog=st.progress(0)
+
+        while(end!=1):
+            res = requests.get('https://accounts.hive-engine.com/accountHistory?account={}&limit=500&offset={}&token=BRO&timestampStart=1617062280&timestampEnd=1901255650'.format(user,x))
+            s.append(res.json())
+
+            x=x+len(res.json())
+            if(len(res.json())<500):
+                end=1
+
+        listfinal=[]
+        for i in range(0,len(s)):
+            for j in range(0,len(s[i])):
+                listfinal.append(s[i][j])
+
+        prog.progress(25)
+
+
+            
+
+        store_list=[]
+        for i in range(0,len(listfinal)):
+            if listfinal[i]['operation']=='tokens_transfer':
+                if listfinal[i]['from']=='brofi':
+                    if listfinal[i]['symbol']=='BRO':
+                        store_list.append([listfinal[i]['from'],listfinal[i]['to'],listfinal[i]['symbol'],listfinal[i]['quantity'],listfinal[i]['memo'],time.strftime('%Y-%m-%d', time.gmtime(listfinal[i]['timestamp']))])
                     
+        df_brofi = pd.DataFrame(store_list,columns=['from','to','symbol','quantity','memo','date'])
+        df_brofi['quantity']=pd.to_numeric(df_brofi['quantity'])
+        df_brofi=df_brofi[df_brofi['date']>'2021-03-29'].reset_index(drop=True)
+
+        df_brofi['memo']=df_brofi['memo'].str.replace("'",'"')
+        df_brofi['pay_bro']=df_brofi['memo'].str.split('payout: ')
+        df_brofi['payment']=''
+
+        for i in range(0,len(df_brofi)):
+            df_brofi['payment'][i]=json.loads(df_brofi['pay_bro'][i][1])
+
+        list_values=[]
+        for i in range(0,len(df_brofi)):
+            for j in df_brofi['payment'][i].items():
+                list_values.append([df_brofi['from'][i],df_brofi['to'][i],j[0],j[1],df_brofi['date'][i]])
+            
+        df_user_details=pd.DataFrame(list_values,columns=['from','to','symbol','quantity','date'])
+
+        sym_list=list(set(df_user_details['symbol']))
+
+        
+
+        
+        n=0
+        total_bro=0
+        for sym in sym_list:
+            
+            n=n+1
+            prog.progress(n/len(sym_list))
+            
+                
+            st.markdown('<hr>',unsafe_allow_html=True)
+            st.header(sym)
+            df_sym=df_user_details[df_user_details['symbol']==sym]
+            sum_sym=df_sym['quantity'].sum()
+            st.write('<div class="card"><div class="card-header"><center>Total BRO you have received for delegating '+sym+' from March 30 till today is : '+'%.6f' % sum_sym+' BRO.</center>',unsafe_allow_html=True)
+            
+            if sum_sym>0:
+                c = alt.Chart(df_sym).mark_line(point=True).encode(x='date', y='quantity',color='symbol',tooltip=['quantity']).properties(width=1400,height=500)                
+                st.write(c)
+
+        total_bro = df_user_details.sum()['quantity']
+        prog.empty()    
+
+        st.write("Total Bro you have received by delegating all the above tokens from March 30 till today is :{} BRO".format(total_bro.round(7)))
+
+        
+
+
+        print(dt.now()-start)
+          
 
     
     
 if __name__ == '__main__':
     
     st.set_page_config(page_title='Hive Earnings stats',layout='wide')
-    choose_app = st.sidebar.selectbox("Choose the app",['Token','Community','BreakEven','Post Rewards'])
+    choose_app = st.sidebar.selectbox("Choose the app",['Token','Community','BreakEven','Post Rewards','BroFi'])
     api=Api()
     
     
@@ -1008,9 +1109,13 @@ if __name__ == '__main__':
     elif choose_app== 'BreakEven':
         
         hivebreakeven()
+
+    elif choose_app== 'BroFi':
+        
+        brofi()
+        
     else:
         hiveauthorrewards()
-    
     
     
     
