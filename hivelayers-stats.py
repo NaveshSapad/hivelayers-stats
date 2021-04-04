@@ -673,7 +673,7 @@ def hivetoken():
     st_select_symbol=st.sidebar.empty() # Symbol - Empty
     st_image=st.sidebar.empty() # Image - Empty
     st_proc=st.sidebar.empty() 
-    st_progress=st.sidebar.empty()
+    #st_progress=st.sidebar.empty()
  
 
     hive_user=st_hive_username.text_input('Enter your Hive username','amr008')
@@ -682,7 +682,7 @@ def hivetoken():
     
     if token:
         start=dt.now()
-        st_progress.progress(10)
+        #st_progress.progress(10)
         df,all_list,sym_list = load_csv(token)
 
         
@@ -692,7 +692,7 @@ def hivetoken():
     if hive_user:
         df_user_details,n,date_count,sum_hive=load_user_details(df,hive_user,token)
         st_proc.write("Data Loaded")
-        st_progress.progress(100)
+        #st_progress.progress(100)
 
 
     sym = st_select_symbol.selectbox('Select SYMBOL',all_list)
