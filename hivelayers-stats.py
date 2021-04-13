@@ -678,7 +678,7 @@ def hivetoken():
 
     hive_user=st_hive_username.text_input('Enter your Hive username','amr008')
     hive_user=hive_user.lower()
-    token=st_select_token.selectbox('Select the token you wish to see dividends for',['BRO','INDEX','DHEDGE','EDS','SPI','UTOPIS','TAN'])
+    token=st_select_token.selectbox('Select the token you wish to see dividends for',['BRO','INDEX','EDS','SPI','UTOPIS','TAN'])
     
     if token:
         start=dt.now()
@@ -1095,9 +1095,9 @@ def brofi():
 if __name__ == '__main__':
     
     st.set_page_config(page_title='Hive Earnings stats',layout='wide')
-    choose_app = st.sidebar.selectbox("Choose the app",['Token','Community','BreakEven','Post Rewards','BroFi'])
+    choose_app = st.sidebar.selectbox("Choose the app",['Token','BreakEven','BroFi'])
     api=Api()
-    
+    #,'Community','Post Rewards'
     
     if choose_app == 'Token':
         
