@@ -421,9 +421,9 @@ def hivecommunity():
 
     d = st.date_input(
          "Choose the date to display the data",
-         datetime.date(2021, 4, 11),
+         datetime.date(2021, 4, 16),
          min_value=datetime.date(2021, 2, 15),
-         max_value=datetime.date(2021, 4, 11))
+         max_value=datetime.date(2021, 4, 16))
 
     st.write('Selected Date:', str(d))
 
@@ -678,7 +678,7 @@ def hivetoken():
 
     hive_user=st_hive_username.text_input('Enter your Hive username','amr008')
     hive_user=hive_user.lower()
-    token=st_select_token.selectbox('Select the token you wish to see dividends for',['BRO','INDEX','EDS','SPI','UTOPIS','TAN'])
+    token=st_select_token.selectbox('Select the token you wish to see dividends for',['BRO','INDEX','EDS','SPI','UTOPIS','TAN','DHEDGE'])
     
     if token:
         start=dt.now()
@@ -1095,9 +1095,9 @@ def brofi():
 if __name__ == '__main__':
     
     st.set_page_config(page_title='Hive Earnings stats',layout='wide')
-    choose_app = st.sidebar.selectbox("Choose the app",['Token','BreakEven','BroFi'])
+    choose_app = st.sidebar.selectbox("Choose the app",['Token','BreakEven','BroFi','Community','Post Rewards'])
     api=Api()
-    #,'Community','Post Rewards'
+    #,
     
     if choose_app == 'Token':
         
