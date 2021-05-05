@@ -308,7 +308,7 @@ def hivecommunity():
     
     </style>    ''',unsafe_allow_html=True)
 
-    user=st.sidebar.text_input("Enter your Hive username")
+    user=st.sidebar.text_input("Enter your Hive username",'amr008')
     user=user.lower()
     title=st.empty()
 
@@ -421,9 +421,9 @@ def hivecommunity():
 
     d = st.date_input(
          "Choose the date to display the data",
-         datetime.date(2021, 5, 2),
+         datetime.date(2021, 5, 4),
          min_value=datetime.date(2021, 2, 15),
-         max_value=datetime.date(2021, 5, 2))
+         max_value=datetime.date(2021, 5, 4))
 
     st.write('Selected Date:', str(d))
 
@@ -1095,7 +1095,7 @@ def brofi():
 if __name__ == '__main__':
     
     st.set_page_config(page_title='Hive Earnings stats',layout='wide')
-    choose_app = st.sidebar.selectbox("Choose the app",['Token','BreakEven','BroFi','Community','Post Rewards'])
+    choose_app = st.sidebar.selectbox("Choose the app",['Community','Token','BreakEven','BroFi','Post Rewards'])
     api=Api()
     #,
     
