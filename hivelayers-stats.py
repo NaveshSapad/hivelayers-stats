@@ -421,9 +421,9 @@ def hivecommunity():
 
     d = st.date_input(
          "Choose the date to display the data",
-         datetime.date(2021, 5, 4),
+         datetime.date(2021, 5, 6),
          min_value=datetime.date(2021, 2, 15),
-         max_value=datetime.date(2021, 5, 4))
+         max_value=datetime.date(2021, 5, 6))
 
     st.write('Selected Date:', str(d))
 
