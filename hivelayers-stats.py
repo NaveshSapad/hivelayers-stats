@@ -526,16 +526,23 @@ def load_user_details(df,hive_user,token):
     date_count=len(set(df_user_details['date']))
 
     
+
+    
     if not df_user_details.empty:
         
         df_last_date=df_user_details[df_user_details['date']==max(df_user_details['date'])]
         
         df_last_date.reset_index(inplace=True)
+        print(df_last_date)
         
 
         if token!='EDS' and token!='UTOPIS':
             for i in range(0,len(df_last_date)):
-                sum_hive_yesterday += get_token_price(df_last_date['symbol'][i])*df_last_date['quantity'][i]
+                if df_last_date['symbol'][i]=='HIVE' or df_last_date['symbol'][i]=='SWAP.HIVE':
+                    sum_hive_yesterday += df_last_date['quantity'][i]
+                else:
+                    sum_hive_yesterday += get_token_price(df_last_date['symbol'][i])*df_last_date['quantity'][i]
+                    print('Sum_hive_converted:'+str(sum_hive_yesterday),df_last_date['symbol'][i])
         else:
             sum_hive_yesterday = df_last_date['quantity'][0]
 
@@ -576,8 +583,8 @@ def get_chart(df_user_details,token,sym_list,sym):
             sum_sym=df_sym['quantity'].sum() # Add it .
 
 
-            if st.checkbox('Show table: Last 10 days '+sym+' payout'):
-                st.table(df_sym.head(10))
+            #if st.checkbox('Show table: Last 10 days '+sym+' payout'):
+             #   st.table(df_sym.head(10))
 
             market=Market() # Market instance
             list_metrics=market.get_metrics() # Returns all the tokens in HE with details
@@ -615,8 +622,8 @@ def get_chart(df_user_details,token,sym_list,sym):
                 df_sym=df_user_details[df_user_details['symbol']==sym]
                 sum_sym=df_sym['quantity'].sum()
 
-                if st.checkbox('Show table: Last 10 days '+sym+' payout'):
-                    st.table(df_sym.head(10))
+                #if st.checkbox('Show table: Last 10 days '+sym+' payout'):
+                 #   st.table(df_sym.head(10))
 
 
                 market=Market() # Market instance
@@ -631,7 +638,8 @@ def get_chart(df_user_details,token,sym_list,sym):
                     total=sum_sym
                     
                 total_hive=total_hive+total
-                
+
+                #print(total_hive)
                 
             
                 st.write('<div class="card"><div class="card-header"><center>Total '+sym+' from Jan 1 : '+'%.6f' % sum_sym+' '+sym+' , In HIVE = '+'%.6f' %total+'.</center>',unsafe_allow_html=True)
@@ -718,6 +726,7 @@ def hivetoken():
             
 
             total_hive=get_chart(df_user_details,token,sym_list,sym)
+            print(total_hive)
 
             my_bar.progress(100)
 
