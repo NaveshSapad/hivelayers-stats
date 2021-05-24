@@ -686,7 +686,7 @@ def hivetoken():
 
     hive_user=st_hive_username.text_input('Enter your Hive username','amr008')
     hive_user=hive_user.lower()
-    token=st_select_token.selectbox('Select the token you wish to see dividends for',['BRO','INDEX','EDS','SPI','UTOPIS','TAN','DHEDGE'])
+    token=st_select_token.selectbox('Select the token you wish to see dividends for',['UTOPIS','BRO','INDEX','EDS','SPI','TAN','DHEDGE'])
     
     if token:
         start=dt.now()
