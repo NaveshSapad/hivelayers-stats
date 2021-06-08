@@ -9,7 +9,7 @@
 
 # In[1]:
 
-
+from datetime import timezone
 import pandas as pd
 from hiveengine.market import Market
 from hiveengine.api import Api
@@ -1078,14 +1078,85 @@ def brofi():
 
 
         print(dt.now()-start)
+
+def token_distribution():
+    choice= st.selectbox("Choose your option",['1 = Get token distribution details for a particular token'])
+    if choice=='1 = Get token distribution details for a particular token':
+        select_choice=1
+    else:
+        select_choice=2
+    
+    
+    if select_choice==1:
+        d1 = st.date_input(
+             "Choose the date to display the data",
+             datetime.date(2021, 6, 7),
+             min_value=datetime.date(2020, 1, 1),
+             max_value=dt.utcnow().date()-timedelta(1))
           
+        element = datetime.datetime.strptime(str(d1),"%Y-%m-%d")
+          
+        timestamp = element.replace(tzinfo=timezone.utc).timestamp()
+
+
+        timestampStart=timestamp
+        timestampEnd=timestampStart+86400
+
+
+        end=0
+        x=0
+        s=[]
+        user='contract_tokens'
+        sym=st.text_input("Enter the symbol")
+        if st.button("Get the data"):
+            if sym!='':
+                sym=sym.upper()
+                while(end!=1):
+                    res = requests.get('https://accounts.hive-engine.com/accountHistory?account={}&limit=500&offset={}&symbol={}&timestampStart={}&timestampEnd={}'.format(user,x,sym,timestampStart,timestampEnd))
+                    s.append(res.json())
+
+                    x=x+len(res.json())
+                    if(len(res.json())<500):
+                        end=1
+
+                        
+                listfinal=[]
+                for i in range(0,len(s)):
+                    for j in range(0,len(s[i])):
+                        listfinal.append(s[i][j])
+
+                df=pd.DataFrame(listfinal)
+                if not df.empty:
+                    df['date']=df['timestamp'].apply(lambda x:time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(x)))
+                    df['quantity']=pd.to_numeric(df['quantity'])
+                    
+                    df_quantity=df.groupby(['to']).sum().sort_values('quantity',ascending=False)['quantity'].to_frame().reset_index()
+                    df_quantity=df_quantity.rename(columns={'to':'account'})
+                    
+                    df_quantity['quantity']=round(df_quantity['quantity'],6)
+                    df_quantity['percentage']=round((df_quantity['quantity']/df_quantity.sum()['quantity'])*100,4)
+                    df_quantity=df_quantity[['account','quantity','percentage']]
+                    df_quantity.index += 1
+
+                    total_issued = df_quantity['quantity'].sum()
+                    avg_sym=df_quantity['quantity'].mean()
+                    median_sym=df_quantity['quantity'].median()
+                    count_number=len(df_quantity)
+                    st.write("<b>Total {} issued on {} is</b> : {} {}".format(sym,d1,total_issued.round(3),sym),unsafe_allow_html=True)
+                    st.write("<b>Average</b>: {} {}<br> <b>Median</b>: {} {} <br> <b>Number of unique users who received tokens</b>: {}<hr>".format(avg_sym.round(3),sym,median_sym.round(3),sym,count_number),unsafe_allow_html=True)
+                    st.table(df_quantity)
+                    
+                    
+                else:
+                    st.write("Not available, please check the symbol and date once again")
+        
 
     
     
 if __name__ == '__main__':
     
     st.set_page_config(page_title='Hive Earnings stats',layout='wide')
-    choose_app = st.sidebar.selectbox("Choose the app",['Community','Token','BreakEven','BroFi','Post Rewards'])
+    choose_app = st.sidebar.selectbox("Choose the app",['Community','Token','BreakEven','BroFi','Post Rewards','Token Distribution'])
     api=Api()
     #,
     
@@ -1104,8 +1175,11 @@ if __name__ == '__main__':
         
         brofi()
         
-    else:
+    elif choose_app=='Post Rewards':
         hiveauthorrewards()
+    else:
+        token_distribution()
+        
     
     
     
