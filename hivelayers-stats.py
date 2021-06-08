@@ -1085,9 +1085,9 @@ def brofi():
 if __name__ == '__main__':
     
     st.set_page_config(page_title='Hive Earnings stats',layout='wide')
-    choose_app = st.sidebar.selectbox("Choose the app",['Community','Token','BreakEven','BroFi','Post Rewards'])
+    choose_app = st.sidebar.selectbox("Choose the app",['Community','BreakEven','BroFi','Post Rewards'])
     api=Api()
-    #,
+    #,,'Token'
     
     if choose_app == 'Token':
         
