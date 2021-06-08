@@ -494,7 +494,7 @@ def load_csv(token):
     
     return df,all_list,sym_list
 
-
+'''
 def load_image(token):
     if(token=='BRO'):
         image = Image.open('logos/bro.png') # Get Bro image
@@ -512,7 +512,7 @@ def load_image(token):
         image = Image.open('logos/utopis.png')
     
     
-    return image
+    return image'''
 
 def load_user_details(df,hive_user,token):
     
@@ -693,8 +693,8 @@ def hivetoken():
         df,all_list,sym_list = load_csv(token)
 
         
-        image=load_image(token)
-        st_image.image(image,use_column_width=True)
+        #image=load_image(token)
+        #st_image.image(image,use_column_width=True)
 
     if hive_user:
         df_user_details,n,date_count,sum_hive=load_user_details(df,hive_user,token)
