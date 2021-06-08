@@ -494,25 +494,7 @@ def load_csv(token):
     
     return df,all_list,sym_list
 
-'''
-def load_image(token):
-    if(token=='BRO'):
-        image = Image.open('logos/bro.png') # Get Bro image
-    elif(token=='INDEX'):
-        image = Image.open('logos/index.png')# Get INDEX image
-    elif(token=='DHEDGE'):
-        image = Image.open('logos/dhedge.png') # Get DHEDGE image
-    elif(token=='EDS'):
-        image = Image.open('logos/EDS.png') # Get EDS image
-    elif(token=='SPI'):
-        image = Image.open('logos/EDS.png') # Same Image for both EDS and SPI
-    elif(token=='TAN'):
-        image = Image.open('logos/tan.png') # Change this
-    elif(token=='UTOPIS'):
-        image = Image.open('logos/utopis.png')
-    
-    
-    return image'''
+
 
 def load_user_details(df,hive_user,token):
     
