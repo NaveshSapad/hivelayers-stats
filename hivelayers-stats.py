@@ -1226,6 +1226,7 @@ def token_distribution():
         if st.button("Get my data"):        
             if user!='':
                 if sym!='':
+                    sym=sym.upper()
                     st.write("<b>Start date chosen: </b>"+str(slider[0]),unsafe_allow_html=True)
                     st.write("<b>End date chosen: </b>"+str(slider[1]),unsafe_allow_html=True)
                       
