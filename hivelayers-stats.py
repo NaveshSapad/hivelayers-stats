@@ -27,6 +27,7 @@ import requests
 import pymssql
 import json
 from datetime import timedelta
+from datetime import datetime as dtmine
 import os
 import altair as alt
 import matplotlib.pyplot as plt
@@ -1080,17 +1081,19 @@ def brofi():
         print(dt.now()-start)
 
 def token_distribution():
-    choice= st.selectbox("Choose your option",['1 = Get token distribution details for a particular token'])
+    choice= st.selectbox("Choose your option",['1 = Get token distribution details for a particular token','2 = Get tokens issued details to a your account on a particular date','3 = Get tokens issue details for a range of dates to your account for a particular token'])
     if choice=='1 = Get token distribution details for a particular token':
         select_choice=1
-    else:
+    elif choice=='2 = Get tokens issued details to a your account on a particular date':
         select_choice=2
+    else:
+        select_choice=3
     
     
     if select_choice==1:
         d1 = st.date_input(
              "Choose the date to display the data",
-             datetime.date(2021, 6, 7),
+             dt.utcnow().date()-timedelta(1),
              min_value=datetime.date(2020, 1, 1),
              max_value=dt.utcnow().date()-timedelta(1))
           
@@ -1111,6 +1114,10 @@ def token_distribution():
         if st.button("Get the data"):
             if sym!='':
                 sym=sym.upper()
+                if sym=='STEM':
+                    user='stemgeeks'
+                elif sym=='SPORTS':
+                    user='sportsrewards'
                 while(end!=1):
                     res = requests.get('https://accounts.hive-engine.com/accountHistory?account={}&limit=500&offset={}&symbol={}&timestampStart={}&timestampEnd={}'.format(user,x,sym,timestampStart,timestampEnd))
                     s.append(res.json())
@@ -1129,6 +1136,12 @@ def token_distribution():
                 if not df.empty:
                     df['date']=df['timestamp'].apply(lambda x:time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(x)))
                     df['quantity']=pd.to_numeric(df['quantity'])
+
+                    if df['symbol'][0]=='SPORTS':
+                        df=df[df['to']!='sportsrewards'].reset_index(drop=True)
+                    elif df['symbol'][0]=='STEM':
+                        df=df[df['to']!='stemgeeks'].reset_index(drop=True)
+                              
                     
                     df_quantity=df.groupby(['to']).sum().sort_values('quantity',ascending=False)['quantity'].to_frame().reset_index()
                     df_quantity=df_quantity.rename(columns={'to':'account'})
@@ -1149,7 +1162,124 @@ def token_distribution():
                     
                 else:
                     st.write("Not available, please check the symbol and date once again")
-        
+    elif(select_choice==2):
+        d1 = st.date_input(
+             "Choose the date to display the data",
+             dt.utcnow().date()-timedelta(1),
+             min_value=datetime.date(2020, 1, 1),
+             max_value=dt.utcnow().date()-timedelta(1))
+          
+        element = datetime.datetime.strptime(str(d1),"%Y-%m-%d")
+          
+        timestamp = element.replace(tzinfo=timezone.utc).timestamp()
+
+
+        timestampStart=timestamp
+        timestampEnd=timestampStart+86400
+
+
+        end=0
+        x=0
+        s=[]
+        user=st.text_input('Enter your username')
+        if st.button("Get the data"):
+                while(end!=1):
+                    res = requests.get('https://accounts.hive-engine.com/accountHistory?account={}&limit=500&offset={}&timestampStart={}&timestampEnd={}'.format(user,x,timestampStart,timestampEnd))
+                    s.append(res.json())
+
+                    x=x+len(res.json())
+                    if(len(res.json())<500):
+                        end=1
+
+                        
+                listfinal=[]
+                for i in range(0,len(s)):
+                    for j in range(0,len(s[i])):
+                        listfinal.append(s[i][j])
+
+                df=pd.DataFrame(listfinal)
+                if not df.empty:
+                    df=df[(df['from']=='contract_tokens') | (df['from']=='stemgeeks') | (df['from']=='sportsrewards')].reset_index(drop=True)
+                    df['quantity']=pd.to_numeric(df['quantity'])
+                    
+                    df_quantity=df.groupby(['symbol']).sum().sort_values('quantity',ascending=False)['quantity'].to_frame().reset_index()
+                    df_quantity=df_quantity.rename(columns={'to':'account'})          
+                    df_quantity['quantity']=round(df_quantity['quantity'],6)
+                    df_quantity['Actual_time_of_issue']=df['timestamp'].apply(lambda x:time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(x)))
+                    df_quantity.index += 1
+                    st.write("These are the tokens issued to your account on {}".format(d1))
+                    st.table(df_quantity)
+                    
+                    
+                else:
+                    st.write("Not available, please check the username and date once again")
+    else:
+        end=0
+        x=0
+        s=[]
+        user=st.text_input("Enter your username:")
+        sym=st.text_input("Enter the symbol")
+        cols1,_ = st.beta_columns((1,1)) # To make it narrower
+        format = 'MMM DD, YYYY'
+        slider = cols1.slider('Select Starting and Ending date for which you want to see the data', min_value=dtmine.utcnow().date()-timedelta(365), value=(dtmine.utcnow().date()-timedelta(30), dtmine.utcnow().date()-timedelta(1)), max_value=dtmine.utcnow().date()-timedelta(1), format=format)
+                    
+        if st.button("Get my data"):        
+            if user!='':
+                if sym!='':
+                    st.write("<b>Start date chosen: </b>"+str(slider[0]),unsafe_allow_html=True)
+                    st.write("<b>End date chosen: </b>"+str(slider[1]),unsafe_allow_html=True)
+                      
+                    element = datetime.datetime.strptime(str(slider[0]),"%Y-%m-%d")
+                      
+                    timestamp = element.replace(tzinfo=timezone.utc).timestamp()
+                    
+
+                    timestampStart=timestamp
+                    #string = input("Enter your end date:")
+                      
+                    element = datetime.datetime.strptime(str(slider[1]),"%Y-%m-%d")
+                      
+                    timestamp = element.replace(tzinfo=timezone.utc).timestamp()
+                    timestampEnd=timestamp+86400
+                    
+                    something=st.empty()
+                    something.write("Please wait while I retrieve your data")
+                    while(end!=1):
+                        res = requests.get('https://accounts.hive-engine.com/accountHistory?account={}&limit=500&offset={}&symbol={}&timestampStart={}&timestampEnd={}'.format(user,x,sym,timestampStart,timestampEnd))
+                        s.append(res.json())
+
+                        x=x+len(res.json())
+                        if(len(res.json())<500):
+                            end=1
+                        #print(res.json())
+
+                            
+                    listfinal=[]
+                    for i in range(0,len(s)):
+                        for j in range(0,len(s[i])):
+                            listfinal.append(s[i][j])
+
+                    df=pd.DataFrame(listfinal)
+                    if not df.empty:
+                        df=df[(df['from']=='contract_tokens') | (df['from']=='stemgeeks') | (df['from']=='sportsrewards')].reset_index(drop=True)
+                        df=df[df['symbol']==sym].reset_index(drop=True)
+                        df['quantity']=pd.to_numeric(df['quantity'])
+                        df['date']=df['timestamp'].apply(lambda x:time.strftime('%Y-%m-%d', time.gmtime(x)))
+                        df_quantity=df.groupby(['date','symbol']).sum().sort_values('quantity',ascending=False)['quantity'].to_frame().reset_index()
+                        df_quantity['quantity']=round(df_quantity['quantity'],6)
+                        df_quantity=df_quantity.sort_values('date').reset_index(drop=True)
+                        df_quantity.index += 1
+                        st.table(df_quantity)
+                        something.write("Data retrieved")
+                    else:
+                        st.write("Not available, please check the username and token once again ")
+                        
+                else:
+                    st.write("Please enter symbol")
+            else:
+                st.write("Please enter username")
+                
+
 
     
     
