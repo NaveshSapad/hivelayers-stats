@@ -296,8 +296,8 @@ def establish_conn(uid,pwd):
 
 def hivecommunity():
     
-    uid = os.environ['hiveuid']
-    pwd = os.environ['hivepwd']
+    uid = 'Hive-amr008'#os.environ['hiveuid']
+    pwd = 'JpoTZ7aNd4Q4Rqrx6ypk'#os.environ['hivepwd']
 
     conn=establish_conn(uid,pwd)
 
@@ -758,19 +758,17 @@ def hiveauthorrewards():
     from datetime import timedelta
     import re
     
-    #st.write("1 = Only a particular URL details ")
-    #st.write("2 = All pending posts ( not comments )")
-    #print("3 = All pending posts and comments")
     
-    #print("Note: Option 3 might take lot of time depending on your engagement - 500 posts+comments takes approximately 25 minutes")
-    
-    choice= st.selectbox("Choose 1 or 2",['1 = Only a particular URL details','2 = All pending posts ( not comments )'])
+    choice= st.selectbox("Choose 1 or 2",['1 = Only a particular URL details','2 = All pending posts ( not comments )','3 = All pending comments ( not posts)','4 = All posts and comments'])
     if choice=='1 = Only a particular URL details':
         select_choice=1
-    else:
+    elif choice=='2 = All pending posts ( not comments )':
         select_choice=2
-    #select_choice=int(select_choice)
-    start=dt.now()
+    elif choice=='3 = All pending comments ( not posts)':
+        select_choice=3
+    else:
+        select_choice=4
+    
 
     
     if select_choice==1:
@@ -854,10 +852,9 @@ def hiveauthorrewards():
 
 
            
-    elif select_choice==2:
-             
-            uid = os.environ['hiveuid']
-            pwd = os.environ['hivepwd']
+    else:            
+            uid = 'Hive-amr008'#os.environ['hiveuid']
+            pwd = 'JpoTZ7aNd4Q4Rqrx6ypk'#os.environ['hivepwd']
         
             conn=establish_conn(uid,pwd)
             
@@ -865,7 +862,12 @@ def hiveauthorrewards():
 
             if st.button("Get my data"):
                 if user!='':
-                    permlink_column = pd.read_sql_query('''select permlink from Comments where author='{}' and  parent_author='' and created > GETDATE()-7 ORDER BY ID DESC '''.format(user),conn)
+                    if select_choice==2:
+                        permlink_column = pd.read_sql_query('''select permlink from Comments where author='{}' and  parent_author='' and created > GETDATE()-7 and active_votes!='[]' ORDER BY ID DESC '''.format(user),conn)
+                    elif select_choice==3:
+                        permlink_column = pd.read_sql_query('''select permlink from Comments where author='{}' and  parent_author!='' and created > GETDATE()-7 and active_votes!='[]' ORDER BY ID DESC '''.format(user),conn)
+                    else:
+                        permlink_column = pd.read_sql_query('''select permlink from Comments where author='{}' and created > GETDATE()-7 and active_votes!='[]' ORDER BY ID DESC '''.format(user),conn)
                     
                     permlink_list=[]
                     for permlink in permlink_column['permlink'].to_list():
@@ -876,10 +878,17 @@ def hiveauthorrewards():
                     only_hive={}
                     my_post_progress = st.progress(0)
                     perm_left=len(permlink_list)
+                    print(perm_left)
+
+                    start=dt.now()
+                    store_token_price={}
                     for permlink in permlink_list:
-                        st.write('https://peakd.com/{}'.format(permlink))
-                        my_post_progress.progress(1/perm_left)
+                        print(dt.now()-start)
+                        st.write('{}. https://peakd.com/{}'.format(perm_left,permlink))
                         perm_left -= 1
+                        my_post_progress.progress((len(permlink_list)-perm_left)/len(permlink_list))
+                        #print()
+                        print(perm_left)
 
                         res = requests.get('https://scot-api.hive-engine.com/{}?hive=1'.format(permlink))
                         json_r=res.json()
@@ -904,6 +913,7 @@ def hiveauthorrewards():
                         hive_total=0
                         len_token=len(tokens)
 
+                        
 
                         for keys in tokens:
                             #my_post_progress.progress(1/len_token)
@@ -915,8 +925,17 @@ def hiveauthorrewards():
 
                             if(json_r[keys]['cashout_time']>str(dt.utcnow())):
                                 flag_current=1
-
-                            hive_price=quantity * get_token_price(keys)
+                                
+                            token_price=0
+                            if keys not in store_token_price:
+                                token_price=get_token_price(keys)
+                                store_token_price[keys]=token_price
+                            else:
+                                token_price=store_token_price[keys]
+                                
+                            print(keys,token_price)
+    
+                            hive_price=quantity * token_price
                             hive_price=round(hive_price,3)
 
                             all_balance_list.append([keys,round(quantity,4),hive_price])
@@ -977,7 +996,7 @@ def hiveauthorrewards():
                     st.write("If you convert all the tokens to Hive = {} HIVE ".format(hive_final))
 
                     st.write("<i> Note , this includes both author and curation rewards </i>",unsafe_allow_html=True)
-                    
+    
 def brofi():
     user=st.text_input('Enter your username')
     user=user.lower()
