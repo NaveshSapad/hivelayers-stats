@@ -759,7 +759,7 @@ def hiveauthorrewards():
     import re
     
     
-    choice= st.selectbox("Choose 1 or 2",['1 = Only a particular URL details','2 = All pending posts ( not comments )','3 = All pending comments ( not posts)','4 = All posts and comments'])
+    choice= st.selectbox("Choose your option",['1 = Only a particular URL details','2 = All pending posts ( not comments )','3 = All pending comments ( not posts)','4 = All posts and comments'])
     if choice=='1 = Only a particular URL details':
         select_choice=1
     elif choice=='2 = All pending posts ( not comments )':
